@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">BookListingApp</string>
+
+    <string name="info_empty_list">Sorry , No books are available</string>
+</resources>
