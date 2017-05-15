@@ -36,43 +36,44 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
 //        UI Type casting
         mBookListView = (ListView) findViewById(R.id.listView_books);
         mAbsenceTextView = (TextView) findViewById(R.id.textView_absence);
-        SearchView mBookSearchView = (SearchView) findViewById(R.id.searchView_play_books);
+        final SearchView mBookSearchView = (SearchView) findViewById(R.id.searchView_play_books);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
 
         // displays the TextView if the listview is empty
         mBookListView.setEmptyView(mAbsenceTextView);
         mAbsenceTextView.setText(getResources().getString(R.string.info_empty_list));
 
-        // if the network is connected , the loader is initialized
-        // else the "No internet is connected" is displayed to User
-        if(isInternetConnected(MainActivity.this)){
-            // sets the adapter to ListView
-            mBookAdapter = new BookAdapter(
-                    MainActivity.this ,
-                    R.layout.layout_book_row ,
-                    new ArrayList<BookInfo>());
+        // sets the adapter to ListView
+        mBookAdapter = new BookAdapter(
+                MainActivity.this ,
+                R.layout.layout_book_row ,
+                new ArrayList<BookInfo>());
 
-            mBookListView.setAdapter(mBookAdapter);
+        mBookListView.setAdapter(mBookAdapter);
 
-            getLoaderManager().initLoader(1 , null , MainActivity.this);
-        }else {
-            mBookSearchView.setVisibility(View.GONE);
-            mBookListView.setVisibility(View.GONE);
-            mAbsenceTextView.setVisibility(View.VISIBLE);
-            mAbsenceTextView.setText(getResources().getString(R.string.info_no_internet));
-        }
+        // loader is initialized
+        getLoaderManager().initLoader(1 , null , MainActivity.this);
 
         mBookSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                // change the visibility of UI components to show progressbar
-                mProgressBar.setVisibility(View.VISIBLE);
-                mBookListView.setVisibility(View.GONE);
-                mAbsenceTextView.setVisibility(View.GONE);
-                // constructing the url with user entered data
-                mQueryUrl ="https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=10";
-                // restart the loader to refetch the new queried data from API
-                getLoaderManager().restartLoader(1 , null , MainActivity.this);
+                // if the network is connected , the loader is restarted with neq query url
+                // else the "No internet is connected" is displayed to User
+                if(isInternetConnected(MainActivity.this)){
+                    // change the visibility of UI components to show progressbar
+                    mProgressBar.setVisibility(View.VISIBLE);
+                    mBookListView.setVisibility(View.GONE);
+                    mAbsenceTextView.setVisibility(View.GONE);
+                    // constructing the url with user entered data
+                    mQueryUrl ="https://www.googleapis.com/books/v1/volumes?q=" + query + "&maxResults=10";
+                    // restart the loader to refetch the new queried data from API
+                    getLoaderManager().restartLoader(1 , null , MainActivity.this);
+                }else {
+//                    mBookSearchView.setVisibility(View.GONE);
+                    mBookListView.setVisibility(View.GONE);
+                    mAbsenceTextView.setVisibility(View.VISIBLE);
+                    mAbsenceTextView.setText(getResources().getString(R.string.info_no_internet));
+                }
                 return false;
             }
 
@@ -81,7 +82,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 return false;
             }
         });
-
     }
 
     @Override
