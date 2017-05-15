@@ -1,5 +1,8 @@
 package com.example.booklistingapp;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -39,8 +42,10 @@ public class Utils {
         return url;
     }
 
-
-
+    /**
+     * Fetches the data from the server using {@link HttpURLConnection}
+     * and converts it into String
+     */
     private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -103,7 +108,7 @@ public class Utils {
      */
     private static ArrayList<BookInfo> extractEarthquakes(String jsonResponse) {
 
-        // Create an empty ArrayList that we can start adding earthquakes to
+        // Create an empty ArrayList that we can start adding Books to
         ArrayList<BookInfo> bookQueried = new ArrayList<>();
 
         // Try to parse the SAMPLE_JSON_RESPONSE. If there's a problem with the way the JSON
@@ -112,7 +117,7 @@ public class Utils {
         try {
 
             // TODO: Parse the response given by the SAMPLE_JSON_RESPONSE string and
-            // build up a list of Earthquake objects with the corresponding data.
+            // build up a list of BookINfo objects with the corresponding data.
             JSONObject mJsonObject = new JSONObject(jsonResponse);
             JSONArray mFeaturesArray = mJsonObject.getJSONArray("items");
             int size = mFeaturesArray.length();
@@ -134,9 +139,6 @@ public class Utils {
                     }
                 }
 
-                int pageCount = mFeaturesArray.getJSONObject(i)
-                        .getJSONObject("volumeInfo")
-                        .optInt("pageCount");
                 double ratings = mFeaturesArray.getJSONObject(i)
                         .getJSONObject("volumeInfo")
                         .optDouble("averageRating");
@@ -145,7 +147,6 @@ public class Utils {
                         .getJSONObject("saleInfo")
                         .getString("saleability");
                 String displayPrice;
-                /* FOR_SALE, FREE, NOT_FOR_SALE, or FOR_PREORDER.*/
                 if(isBookForSale.equalsIgnoreCase("NOT_FOR_SALE")
                         || isBookForSale.equalsIgnoreCase("FOR_PREORDER")
                         || isBookForSale.equalsIgnoreCase("FREE")){
@@ -163,7 +164,7 @@ public class Utils {
                     displayPrice = currencyCode +" "+ retailPrice;
                 }
 
-                BookInfo mInfo = new BookInfo(title , authors ,pageCount , ratings , displayPrice , "");
+                BookInfo mInfo = new BookInfo(title , authors , ratings , displayPrice );
                 bookQueried.add(mInfo);
             }
 
@@ -171,7 +172,7 @@ public class Utils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the earthquake JSON results", e);
+            Log.e("QueryUtils", "Problem parsing the GooglePlayBooks JSON results", e);
         }
 
         // Return the list of earthquakes
@@ -195,18 +196,11 @@ public class Utils {
             Log.e(LOG_TAG, "Error closing input stream", e);
         }
 
-        // Extract relevant fields from the JSON response and create an {@link Event} object
+        // Extract relevant fields from the JSON response and create an {@link BookInfo} object
         List<BookInfo> bookInfos = extractEarthquakes(jsonResponse);
 
-        // Return the {@link Event}
+        // Return the {@link BookInfo}
         return bookInfos;
     }
-
-    public static boolean isInternetConnected(){
-
-
-        return false;
-    }
-
 
 }

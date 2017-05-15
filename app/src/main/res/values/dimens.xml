@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <dimen name="listview_divider_height">5dp</dimen>
+    <dimen name="listview_row_paddding">5dp</dimen>
+    <dimen name="textview_right_margin">15dp</dimen>
+</resources>

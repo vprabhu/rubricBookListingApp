@@ -31,12 +31,10 @@ public class BookAdapter extends ArrayAdapter<BookInfo>{
         mContext = context;
     }
 
-
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         ViewHoler mViewHoler;
-
 
         if(convertView ==null){
             convertView = LayoutInflater.from(mContext)
@@ -66,10 +64,12 @@ public class BookAdapter extends ArrayAdapter<BookInfo>{
         // sets the ratings
         float rating = (float) mBookInfo.getRating();
         mViewHoler.mRatingsTextView.setText(""+rating);
-        Log.d("Stars", "getView: Ratings " + mBookInfo.getRating());
         return convertView;
     }
 
+    /**
+     * View holder to host the UI
+     */
    static class ViewHoler{
        private TextView mTitleTextView;
        private TextView mAuthorTextView;

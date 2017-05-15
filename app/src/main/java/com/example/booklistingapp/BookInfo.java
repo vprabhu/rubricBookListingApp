@@ -8,18 +8,14 @@ public class BookInfo {
 
     private String title;
     private String author;
-    private int pageCount;
     private double rating;
     private String retialPrice;
-    private String ImageLinks;
 
-    public BookInfo(String title, String author, int pageCount, double rating, String retialPrice, String imageLinks) {
+    public BookInfo(String title, String author , double rating, String retialPrice) {
         this.title = title;
         this.author = author;
-        this.pageCount = pageCount;
         this.rating = rating;
         this.retialPrice = retialPrice;
-        ImageLinks = imageLinks;
     }
 
     public String getTitle() {
@@ -30,10 +26,6 @@ public class BookInfo {
         return author;
     }
 
-    public int getPageCount() {
-        return pageCount;
-    }
-
     public double getRating() {
         return rating;
     }
@@ -42,7 +34,4 @@ public class BookInfo {
         return retialPrice;
     }
 
-    public String getImageLinks() {
-        return ImageLinks;
-    }
 }
